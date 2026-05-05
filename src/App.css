@@ -1,0 +1,436 @@
+/* 1. RESET & CORE LAYOUT */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif; /* Clean, modern font */
+}
+
+body, html, #root, .App {
+    background: transparent; /* fallback black */
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* 2. THE BACKGROUND VIDEO */
+#bg-video {
+    position: fixed; /* This is the most important line! */
+    top: 0;
+    left: 0;
+    width: 100vw;    /* 100% of Viewport Width */
+    height: 100vh;   /* 100% of Viewport Height */
+    object-fit: cover; /* This prevents the video from looking 'squished' */
+    z-index: -1;     /* Puts it behind your cards */
+    pointer-events: none; /* Allows you to click things 'through' the video */
+}
+
+/* Ensure nothing else has a solid background color blocking the video */
+.App, .page-wrapper {
+    background: transparent !important;
+}
+
+/* 3. THE PAGE WRAPPER (Centers the Card) */
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 4. THE GLASS CARD */
+.glass-card {
+    background: rgba(255, 255, 255, 0.08) !important; /* Frosted base */
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+}
+
+.glass-card h2 {
+    margin-bottom: 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 2rem;
+}
+
+/* 5. FLOATING INPUTS */
+.input-group {
+    position: relative;
+    margin-bottom: 35px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.input-group input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+/* Animation for Floating Labels */
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -20px;
+    font-size: 12px;
+    color: #00d2ff; /* Cyan accent matching your video */
+}
+
+/* 6. BUTTONS & LINKS */
+.primary-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #00d2ff, #0077ff);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.4s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+.primary-btn:hover {
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.8);
+    transform: translateY(-3px);
+}
+
+.footer-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-link a {
+    color: #00d2ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* 7. STATUS MESSAGES */
+.status-msg {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.status-msg.error { background: rgba(255, 77, 77, 0.2); color: #ff4d4d; border: 1px solid #ff4d4d; }
+.status-msg.success { background: rgba(0, 255, 136, 0.2); color: #00ff88; border: 1px solid #00ff88; }
+.products-page {
+    padding-top: 100px;
+    min-height: 100vh;
+    color: white;
+}
+
+.glow-text {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px 0;
+}
+
+/* GLASSMORPHISM CARD */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card:hover {
+    transform: scale(1.03);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #00d2ff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-content { padding: 20px; }
+
+.price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #00d2ff;
+}
+
+.action-btn {
+    background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+}
+.products-wrapper {
+    padding: 120px 20px 60px; /* Space for fixed NavBar */
+    min-height: 100vh;
+}
+
+.glow-text {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(0, 210, 255, 0.7);
+    margin-bottom: 10px;
+}
+
+.hub-header {
+    text-align: center;
+    margin-bottom: 60px;
+    color: rgba(255,255,255,0.8);
+}
+
+/* THE GRID */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* THE GLASS CARD */
+.glass-product-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    color: white;
+}
+
+.glass-product-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #00d2ff;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.image-container {
+    position: relative;
+    height: 200px;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 210, 255, 0.8);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.card-info { padding: 20px; }
+
+.price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00ffcc;
+}
+
+.details-btn {
+    background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+.hub-container {
+    padding: 100px 5% 50px;
+    min-height: 100vh;
+}
+
+.main-logo-text {
+    font-size: 4rem;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 5px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 50px;
+}
+
+/* THE GLASS CARD */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05); /* Very transparent */
+    backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #00d2ff;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.image-box img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-details {
+    padding: 25px;
+    color: white;
+}
+
+.card-details h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.description {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 20px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #00d2ff;
+}
+
+.view-btn {
+    background: rgba(0, 210, 255, 0.2);
+    border: 1px solid #00d2ff;
+    color: #00d2ff;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.view-btn:hover {
+    background: #00d2ff;
+    color: black;
+    box-shadow: 0 0 15px #00d2ff;
+}
+/* Modal Background Blur */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px); /* This makes the background video look amazing when open */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* The Glass Card Expansion */
+.expanded-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    width: 90%;
+    max-width: 900px;
+    padding: 40px;
+    position: relative;
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content {
+    display: flex;
+    gap: 30px;
+    flex-direction: row;
+}
+
+/* For Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modal-content { flex-direction: column; }
+    .expanded-card { height: 80vh; overflow-y: auto; }
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    
+    /* The Frosted Effect */
+    background: rgba(255, 255, 255, 0.05); /* Very light white tint */
+    backdrop-filter: blur(15px) saturate(150%); /* The frost and color boost */
+    -webkit-backdrop-filter: blur(15px) saturate(150%); /* Support for Safari */
+    
+    /* Visual separation */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    
+    transition: all 0.3s ease;
+    padding: 15px 5%;
+}
