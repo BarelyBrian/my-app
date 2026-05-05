@@ -433,4 +433,46 @@ body, html, #root, .App {
     
     transition: all 0.3s ease;
     padding: 15px 5%;
+} 
+/* 1. The Overlay: Centers the card and allows it to be the scroll target */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 8, 15, 0.9); /* Dark bluish tint */
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+/* 2. The Card: Becomes the scrollable container */
+.expanded-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh; /* Keeps the card within the window */
+    overflow-y: auto; /* INTERNAL SCROLLING ENABLED */
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
+}
+
+/* 3. The Image: Restrained to the card size */
+.modal-image {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.modal-image img {
+    width: 100%;
+    max-height: 450px; /* Prevents the image from taking the whole screen */
+    object-fit: contain; /* Keeps the Crocs looking natural, not stretched */
+    border-radius: 12px;
 }
