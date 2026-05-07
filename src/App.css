@@ -476,3 +476,14 @@ body, html, #root, .App {
     object-fit: contain; /* Keeps the Crocs looking natural, not stretched */
     border-radius: 12px;
 }
+/* Chatbot */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
