@@ -1,3 +1,4 @@
+// working currently
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,15 +21,15 @@ function App() {
         <video autoPlay muted loop id="bg-video">
           <source src="background.mp4" type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </video> 
 
         {/* LAYER 1: THE NAVBAR */}
         <NavBar />
-
-        {/* LAYER 2: THE SWITCHER */}
+         {/* LAYER 2: THE SWITCHER */}
         {/* The Routes component ensures that ONLY ONE of these shows at a time */}
         <Routes>
-          {/* Default path redirects to Sign In */}
+          {/* Default path redirects
+           to Sign In */}
           
 
           <Route path="/" element={<Navigate to="/products" />} />

@@ -1,137 +1,156 @@
+// working sign up?
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
-    // Hooks for state
-    const [name, setName] = useState("");
+    // Logic Hooks
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState(""); // Added back for M-Pesa compatibility
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState("");
+    const [phone, setPhone] = useState("");
+
+    // Feedback Hooks
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
+    
     const navigate = useNavigate();
 
-    // handleSignUp aligned with original logic
-    const handleSignUp = async (e) => {
+    const submit = async (e) => {
         e.preventDefault();
-        setLoading("Creating your account...");
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
+        const data = new FormData();
+        data.append('username', username);
+        data.append('email', email);
+        data.append('password', password);
+        data.append('phone', phone);
 
         try {
-            // Logic must use FormData to be compatible with the PHP $_POST superglobal
-            const data = new FormData();
-            data.append('name', name);
-            data.append('email', email);
-            data.append('phone', phone); 
-            data.append('password', password);
+            // Using https to match AlwaysData security
+            const response = await axios.post("https://brianswala.alwaysdata.net/api/signup", data);
+            
+            setLoading(false);
+            setSuccess("Account created successfully! Redirecting to login...");
+            
+            // Clear fields
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setPhone("");
 
-            // POST request to your AlwaysData API
-            const response = await axios.post(
-                "http://brianswala.alwaysdata.net/api/signup", 
-                data
-            );
+            // Redirect to Sign In after success so they can log in
+            setTimeout(() => {
+                navigate("/signin");
+            }, 2000);
 
-            // Original logic: The backend must return {"message": "success"}
-            if (response.data.message === "success") {
-                setLoading("Registration successful! Redirecting...");
-                setTimeout(() => navigate("/login"), 2000);
-            } else {
-                // Displays the specific error from the PHP script (e.g., "Email already exists")
-                setLoading(response.data.message || "Registration failed. Try again.");
-            }
-        } catch (error) {
-            console.error("Signup Error:", error);
-            setLoading("Network error: Check your connection.");
+        } catch (err) {
+            setLoading(false);
+            setError(err.message || "An error occurred during sign up.");
         }
-    };
+    }
 
     return (
         <div className="products-wrapper">
-            <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '90vh' }}>
-                {/* Blue Glassmorphism Container */}
+            <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '95vh' }}>
+                
+                {/* Cyan Glassmorphism Card */}
                 <div className="glass-card-auth p-4 w-100" style={{ 
                     maxWidth: '450px', 
-                    border: '1px solid rgba(0, 210, 255, 0.2)',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    backdropFilter: 'blur(10px)'
+                    background: 'rgba(255, 255, 255, 0.03)', 
+                    backdropFilter: 'blur(12px)', 
+                    border: '1px solid rgba(0, 210, 255, 0.3)',
+                    borderRadius: '24px',
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.7)',
                 }}>
+                    
                     <div className="text-center">
-                        <h2 className="glow-text-small mb-4" style={{ color: '#00d2ff' }}>JOIN STUDY SWAP</h2>
-                        
-                        <form onSubmit={handleSignUp} className="text-start">
+                        <h2 className="glow-text-small mb-4" style={{ color: '#00d2ff', letterSpacing: '3px', fontWeight: '800' }}>
+                            CREATE ACCOUNT
+                        </h2>
+
+                        <form onSubmit={submit} className="text-start">
+                            {/* Username */}
                             <div className="form-group mb-3">
-                                <label className="text-light opacity-75 mb-1" style={{ fontSize: '0.85rem' }}>Full Name</label>
+                                <label className="text-light opacity-50 mb-1" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Username</label>
                                 <input 
                                     type="text" 
-                                    className="form-control glass-input" 
-                                    placeholder="Enter your name"
-                                    required
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.2)' }}
+                                    className="form-control glass-input"
+                                    placeholder="Choose a username"
+                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.1)', borderRadius: '12px' }}
+                                    required value={username} onChange={(e) => setUsername(e.target.value)} 
                                 />
                             </div>
 
+                            {/* Email */}
                             <div className="form-group mb-3">
-                                <label className="text-light opacity-75 mb-1" style={{ fontSize: '0.85rem' }}>Email Address</label>
+                                <label className="text-light opacity-50 mb-1" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Email Address</label>
                                 <input 
                                     type="email" 
-                                    className="form-control glass-input" 
-                                    placeholder="student@campus.com"
-                                    required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.2)' }}
+                                    className="form-control glass-input"
+                                    placeholder="Enter university email"
+                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.1)', borderRadius: '12px' }}
+                                    required value={email} onChange={(e) => setEmail(e.target.value)} 
                                 />
                             </div>
 
-                            {/* Re-integrated Phone Field */}
+                            {/* Password */}
                             <div className="form-group mb-3">
-                                <label className="text-light opacity-75 mb-1" style={{ fontSize: '0.85rem' }}>Phone (M-Pesa)</label>
-                                <input 
-                                    type="text" 
-                                    className="form-control glass-input" 
-                                    placeholder="2547XXXXXXXX"
-                                    required
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.2)' }}
-                                />
-                            </div>
-
-                            <div className="form-group mb-4">
-                                <label className="text-light opacity-75 mb-1" style={{ fontSize: '0.85rem' }}>Create Password</label>
+                                <label className="text-light opacity-50 mb-1" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Password</label>
                                 <input 
                                     type="password" 
-                                    className="form-control glass-input" 
-                                    placeholder="Min. 6 characters"
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.2)' }}
+                                    className="form-control glass-input"
+                                    placeholder="Create a strong password"
+                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.1)', borderRadius: '12px' }}
+                                    required value={password} onChange={(e) => setPassword(e.target.value)} 
                                 />
                             </div>
 
-                            <button type="submit" className="view-btn w-100 py-3" style={{ 
-                                background: 'linear-gradient(45deg, #00d2ff, #3a7bd5)', 
-                                border: 'none', 
-                                color: '#fff',
-                                borderRadius: '12px',
-                                fontWeight: '600'
-                            }}>
-                                {loading.includes("Creating") ? "Syncing..." : "Create Account"}
+                            {/* Phone */}
+                            <div className="form-group mb-4">
+                                <label className="text-light opacity-50 mb-1" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Phone Number</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control glass-input"
+                                    placeholder="e.g. 0712345678"
+                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.1)', borderRadius: '12px' }}
+                                    required value={phone} onChange={(e) => setPhone(e.target.value)} 
+                                />
+                            </div>
+
+                            {/* Feedback Messages */}
+                            {error && <div className="mb-3 p-2 text-center rounded" style={{ background: 'rgba(255, 77, 77, 0.1)', color: '#ff4d4d', border: '1px solid #ff4d4d', fontSize: '0.85rem' }}>{error}</div>}
+                            {success && <div className="mb-3 p-2 text-center rounded" style={{ background: 'rgba(0, 210, 255, 0.1)', color: '#00d2ff', border: '1px solid #00d2ff', fontSize: '0.85rem' }}>{success}</div>}
+
+                            <button 
+                                type="submit" 
+                                disabled={loading}
+                                className="w-100 py-3 d-flex align-items-center justify-content-center gap-2" 
+                                style={{ 
+                                    background: loading ? 'rgba(0, 210, 255, 0.1)' : 'linear-gradient(45deg, #00d2ff, #3a7bd5)', 
+                                    border: 'none', 
+                                    color: loading ? '#00d2ff' : '#000',
+                                    fontWeight: '700',
+                                    borderRadius: '12px',
+                                    transition: 'all 0.3s ease'
+                                }}>
+                                {loading ? (
+                                    <>
+                                        <div className="spinner-border spinner-border-sm" role="status"></div>
+                                        <span>PROCESSING...</span>
+                                    </>
+                                ) : (
+                                    "JOIN THE HUB"
+                                )}
                             </button>
                         </form>
 
-                        {/* Visual Feedback Area */}
-                        {loading && (
-                            <div className="mt-3 p-2 rounded" style={{ background: 'rgba(0, 210, 255, 0.1)', border: '1px solid rgba(0, 210, 255, 0.2)' }}>
-                                <p className="text-info mb-0" style={{ fontSize: '0.9rem', color: '#00d2ff' }}>{loading}</p>
-                            </div>
-                        )}
-
                         <div className="mt-4">
                             <p className="text-light opacity-50" style={{ fontSize: '0.85rem' }}>
-                                Already a member? <Link to="/login" className="text-info text-decoration-none" style={{ color: '#00d2ff' }}>Login here</Link>
+                                Already a member? <Link to="/signin" className="text-decoration-none" style={{ color: '#00d2ff', fontWeight: '600' }}>Sign In</Link>
                             </p>
                         </div>
                     </div>
@@ -139,6 +158,6 @@ const SignUp = () => {
             </div>
         </div>
     );
-};
+}
 
 export default SignUp;

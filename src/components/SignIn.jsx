@@ -1,118 +1,128 @@
+// workin sign in?
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
-    // Hooks aligned with your existing logic
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState({ type: '', text: '' });
+    // Logic Hooks
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    
+    // Feedback Hooks
+    const [loading, setLoading] = useState("");
+    const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
+    
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+    const submit = async (e) => {
         e.preventDefault();
-        setMessage({ type: '', text: 'Verifying...' });
+        setLoading("Verifying Credentials...");
+        setError("");
+        setSuccess("");
 
-        // Maintain your FormData logic for AlwaysData compatibility
         const data = new FormData();
         data.append('username', username);
         data.append('password', password);
 
         try {
-            // Updated to https to prevent Network/Mixed-Content errors
-            const response = await axios.post("http://brianswala.alwaysdata.net/api/signin", data);
+            // Using https for AlwaysData stability
+            const response = await axios.post("https://brianswala.alwaysdata.net/api/signin", data);
             
-            // Checking for 'success' status from your specific PHP structure
-            if (response.data.status && response.data.status.toLowerCase() === "success") {
-                console.log("Log in successful");
+            setLoading("");
+            
+            if (response.data.user) {
+                setSuccess(response.data.message || "Login Successful!");
                 
-                // 1. Save the user object to localStorage as a string
+                // Save user object to local storage
                 localStorage.setItem("user", JSON.stringify(response.data.user));
                 
-                // 2. Navigation
-                setMessage({ type: 'success', text: 'Success! Redirecting...' });
+                // Redirect to Home Hub
                 setTimeout(() => {
                     navigate("/");
-                }, 500);
+                }, 1000);
             } else {
-                setMessage({ type: 'error', text: response.data.message || "Invalid credentials" });
+                setError(response.data.message || "Invalid username or password.");
             }
-            
+
+            // Clear fields
+            setUsername("");
+            setPassword("");
+
         } catch (err) {
-            console.error("Login Error:", err);
-            setMessage({ 
-                type: 'error', 
-                text: "Server unreachable. Ensure CORS headers are in your PHP file." 
-            });
+            setLoading("");
+            setError(err.message || "Connection error. Hub unreachable.");
         }
     };
 
     return (
         <div className="products-wrapper">
             <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '90vh' }}>
-                {/* Blue Glassmorphism Card */}
+                
+                {/* High-Fidelity Glass Card */}
                 <div className="glass-card-auth p-4 w-100" style={{ 
                     maxWidth: '400px', 
-                    border: '1px solid rgba(0, 210, 255, 0.2)',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    backdropFilter: 'blur(15px)',
-                    borderRadius: '20px'
+                    background: 'rgba(255, 255, 255, 0.03)', 
+                    backdropFilter: 'blur(12px)', 
+                    border: '1px solid rgba(0, 210, 255, 0.3)',
+                    borderRadius: '24px',
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.7)',
                 }}>
+                    
                     <div className="text-center">
-                        <h2 className="glow-text-small mb-4" style={{ color: '#00d2ff' }}>WELCOME BACK</h2>
-                        
-                        <form onSubmit={handleLogin} className="text-start">
+                        <h2 className="glow-text-small mb-4" style={{ color: '#00d2ff', letterSpacing: '3px', fontWeight: '800' }}>
+                            STUDYSWAP HUB
+                        </h2>
+
+                        <form onSubmit={submit} className="text-start">
+                            {/* Username Input */}
                             <div className="form-group mb-3">
-                                <label className="text-light opacity-75 mb-1" style={{ fontSize: '0.85rem' }}>Username</label>
+                                <label className="text-light opacity-50 mb-1" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Username</label>
                                 <input 
                                     type="text" 
                                     className="form-control glass-input"
                                     placeholder="Enter username"
-                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.2)' }}
-                                    value={username} 
-                                    onChange={(e) => setUsername(e.target.value)} 
-                                    required 
+                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.1)', borderRadius: '12px' }}
+                                    required value={username} onChange={(e) => setUsername(e.target.value)} 
                                 />
                             </div>
 
+                            {/* Password Input */}
                             <div className="form-group mb-4">
-                                <label className="text-light opacity-75 mb-1" style={{ fontSize: '0.85rem' }}>Password</label>
+                                <label className="text-light opacity-50 mb-1" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>Password</label>
                                 <input 
                                     type="password" 
                                     className="form-control glass-input"
                                     placeholder="Enter password"
-                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.2)' }}
-                                    value={password} 
-                                    onChange={(e) => setPassword(e.target.value)} 
-                                    required 
+                                    style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(0, 210, 255, 0.1)', borderRadius: '12px' }}
+                                    required value={password} onChange={(e) => setPassword(e.target.value)} 
                                 />
                             </div>
 
-                            {message.text && (
-                                <div className="mb-3 p-2 rounded text-center" style={{ 
-                                    background: message.type === 'error' ? 'rgba(255, 77, 77, 0.1)' : 'rgba(0, 210, 255, 0.1)',
-                                    border: `1px solid ${message.type === 'error' ? '#ff4d4d' : '#00d2ff'}`
-                                }}>
-                                    <p style={{ color: message.type === 'error' ? '#ff4d4d' : '#00d2ff', fontSize: '0.85rem', margin: 0 }}>
-                                        {message.text}
-                                    </p>
-                                </div>
-                            )}
+                            {/* Dynamic Feedback UI */}
+                            {loading && <div className="mb-3 text-info small text-center glow-text-blue">{loading}</div>}
+                            {error && <div className="mb-3 p-2 text-center rounded" style={{ background: 'rgba(255, 77, 77, 0.1)', color: '#ff4d4d', border: '1px solid #ff4d4d', fontSize: '0.85rem' }}>{error}</div>}
+                            {success && <div className="mb-3 p-2 text-center rounded" style={{ background: 'rgba(0, 210, 255, 0.1)', color: '#00d2ff', border: '1px solid #00d2ff', fontSize: '0.85rem' }}>{success}</div>}
 
-                            <button type="submit" className="view-btn w-100 py-3" style={{ 
-                                background: 'linear-gradient(45deg, #00d2ff, #3a7bd5)', 
-                                border: 'none', 
-                                color: '#fff',
-                                fontWeight: '600',
-                                borderRadius: '12px'
-                            }}>
-                                Sign In
+                            <button 
+                                type="submit" 
+                                disabled={loading !== ""}
+                                className="w-100 py-3 d-flex align-items-center justify-content-center gap-2" 
+                                style={{ 
+                                    background: loading ? 'rgba(0, 210, 255, 0.1)' : 'linear-gradient(45deg, #00d2ff, #3a7bd5)', 
+                                    border: 'none', 
+                                    color: loading ? '#00d2ff' : '#000',
+                                    fontWeight: '700',
+                                    borderRadius: '12px',
+                                    transition: 'all 0.3s ease'
+                                }}>
+                                {loading ? "AUTHORIZING..." : "SIGN IN"}
                             </button>
                         </form>
 
                         <div className="mt-4">
                             <p className="text-light opacity-50" style={{ fontSize: '0.85rem' }}>
-                                New to StudySwap? <Link to="/signup" className="text-info text-decoration-none" style={{ color: '#00d2ff' }}>Create Account</Link>
+                                Don't have an account? <Link to="/signup" className="text-decoration-none" style={{ color: '#00d2ff', fontWeight: '600' }}>Sign Up</Link>
                             </p>
                         </div>
                     </div>
