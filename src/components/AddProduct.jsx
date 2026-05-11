@@ -27,7 +27,7 @@ const AddProduct = () => {
         data.append('product_photo', image);
 
         try {
-            const response = await axios.post("http://brianswala.alwaysdata.net/api/add_product", data);
+            const response = await axios.post("https://brianswala.alwaysdata.net/api/add_product", data);
             
             if (response.data.status && response.data.status.toLowerCase() === "success") {
                 setMessage({ type: 'success', text: 'Product listed successfully!' });

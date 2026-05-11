@@ -16,12 +16,12 @@ const GetProducts = () => {
     ]);
     const [userInput, setUserInput] = useState("");
 
-    const img_url = "http://brianswala.alwaysdata.net/static/images/";
+    const img_url = "https://brianswala.alwaysdata.net/static/images/";
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get("http://brianswala.alwaysdata.net/api/get_product_details");
+                const response = await axios.get("https://brianswala.alwaysdata.net/api/get_product_details");
                 setProducts(response.data);
                 setLoading(false);
             } catch (error) {
