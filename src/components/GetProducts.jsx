@@ -16,7 +16,7 @@ const GetProducts = () => {
     ]);
     const [userInput, setUserInput] = useState("");
 
-    const img_url = "https://brianswala.alwaysdata.net/static/images/";
+    const img_url = "http://brianswala.alwaysdata.net/static/images/";
 
     useEffect(() => {
         const fetchProducts = async () => {
