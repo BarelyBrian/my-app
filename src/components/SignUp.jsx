@@ -33,7 +33,7 @@ const SignUp = () => {
             const response = await axios.post("https://brianswala.alwaysdata.net/api/signup", data);
             
             setLoading(false);
-            setSuccess("Account created successfully! Redirecting to login...");
+            setSuccess(response.data.success)
             
             // Clear fields
             setUsername("");
