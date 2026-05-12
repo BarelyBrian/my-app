@@ -32,7 +32,7 @@ function App() {
            to Sign In */}
           
 
-          <Route path="/" element={<Navigate to="/" />} />
+          <Route path="/" element={<Navigate to="/signin" />} />
           
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
