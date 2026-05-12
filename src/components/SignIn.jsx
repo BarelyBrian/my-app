@@ -38,7 +38,7 @@ const SignIn = () => {
                 
                 // Redirect to Home Hub
                 setTimeout(() => {
-                    navigate("/");
+                    navigate("/products");
                 }, 1000);
             } else {
                 setError(response.data.message || "Invalid username or password.");

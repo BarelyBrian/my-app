@@ -32,10 +32,10 @@ function App() {
            to Sign In */}
           
 
-          <Route path="/" element={<Navigate to="/products" />} />
+          <Route path="/" element={<Navigate to="/" />} />
           
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/" element={<SignUp />} />
           <Route path="/products" element={<GetProducts />} />
           <Route path="/add-product" element={<AddProduct />} />
           <Route path="/mpesa-payment" element={<MpesaPayment />} />
