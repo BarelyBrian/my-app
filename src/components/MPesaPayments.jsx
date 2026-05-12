@@ -110,7 +110,7 @@ const MpesaPayement = () => {
                         )}
                         
                         <div className="mt-4">
-                            <Link to="/" className="text-light opacity-50 text-decoration-none" style={{ fontSize: '0.8rem' }}>
+                            <Link to="/products" className="text-light opacity-50 text-decoration-none" style={{ fontSize: '0.8rem' }}>
                                 ← Cancel and Return
                             </Link>
                         </div>
